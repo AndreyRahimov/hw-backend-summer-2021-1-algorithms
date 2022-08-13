@@ -28,7 +28,35 @@ class Graph:
         self._root = root
 
     def dfs(self) -> list[Node]:
-        raise NotImplementedError
+        result = []
+
+        def dive(element):
+            if element not in result:
+                result.append(element)
+            if len(element.outbound) > 0:
+                for next_el in element.outbound:
+                    if next_el in result:
+                        continue
+                    dive(next_el)
+
+        dive(self._root)
+        return result
 
     def bfs(self) -> list[Node]:
-        raise NotImplementedError
+        result = []
+        visited = []
+
+        def walk(element):
+            if element not in result:
+                result.append(element)
+                visited.append(element)
+            if len(element.outbound) > 0:
+                for next_el in element.outbound:
+                    if next_el not in result:
+                        result.append(next_el)
+                for next_el in element.outbound:
+                    if next_el not in visited:
+                        walk(next_el)
+
+        walk(self._root)
+        return result
